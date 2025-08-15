@@ -1,0 +1,87 @@
+<!-- HTML 面板内容 -->
+<div class="app">
+  <div class="table-header" role="row">
+    <div class="th">笔记标题</div>
+    <div class="th">发布时间</div>
+    <div class="th">曝光数</div>
+    <div class="th">阅读数</div>
+    <div class="th">涨粉数</div>
+  </div>
+  <div class="scroll-body" id="scrollBody">
+    <div id="notes"></div>
+  </div>
+</div>
+
+<!-- CSS 面板内容 -->
+<style>
+:root{
+  --header-h: 64px;
+  --note-h: 56px;
+  --gap: 12px;
+  --body-pad: 16px;
+  --border: 1px solid #e5e7eb;
+  --radius: 12px;
+  --bg: #f9fafb;
+}
+*{ box-sizing: border-box; }
+html,body{ height:100%; margin:0; font:14px/1.5 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial; color:#111827; background:var(--bg); }
+.app{ height:100%; display:flex; flex-direction:column; }
+.table-header{
+  position: sticky; top: 0; z-index: 10;
+  height: var(--header-h);
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  align-items: center; gap: 8px;
+  padding: 0 16px; background: white;
+  border-bottom: var(--border);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+.th{ font-weight:600; color:#374151; }
+.scroll-body{
+  height: calc(100vh - var(--header-h));
+  overflow: auto;
+  padding: 0 var(--body-pad) var(--body-pad);
+}
+.note-section{ margin-bottom: 24px; }
+.note-header{
+  position: sticky; top: 0; z-index: 5;
+  height: var(--note-h);
+  display: flex; align-items:center; gap:12px;
+  padding: 0 16px; margin-bottom: var(--gap);
+  background: #fff; border: var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 12px -12px rgba(0,0,0,0.25);
+}
+.note-title{ font-weight:600; }
+.note-meta{ color:#6b7280; font-size:12px; }
+.comment{
+  background:#fff; border: var(--border); border-radius: 10px;
+  padding: 12px 14px; margin-bottom: 10px;
+}
+.comment .meta{ color:#6b7280; font-size:12px; margin-bottom:6px; }
+</style>
+
+<!-- JS 面板内容 -->
+<script>
+const NOTES = 5;
+const COMMENTS_PER_NOTE = 10;
+const notesRoot = document.getElementById('notes');
+const mk = (tag, cls, text) => { const el = document.createElement(tag); if(cls) el.className = cls; if(text) el.textContent = text; return el; };
+for(let i=1;i<=NOTES;i++){
+  const section = mk('section','note-section');
+  const header = mk('div','note-header');
+  const title = mk('div','note-title',`笔记 #${i} 标题`);
+  const meta  = mk('div','note-meta',`发布：2023-11-03 | 曝光 4020万 | 阅读 4020万 | 涨粉 4020`);
+  header.append(title, meta);
+  const list = mk('div','comments');
+  for(let j=1;j<=COMMENTS_PER_NOTE;j++){
+    const c = mk('div','comment');
+    const m = mk('div','meta',`评论者@用户${String(j).padStart(2,'0')} · 2024-01-30`);
+    const t = mk('div','text',`这是对笔记#${i} 的第 ${j} 条评论`);
+    c.append(m,t);
+    list.append(c);
+  }
+  section.append(header, list);
+  notesRoot.append(section);
+}
+</script>
